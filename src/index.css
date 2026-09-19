@@ -1,0 +1,1200 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   DESIGN SYSTEM — Aaradhya's 3rd Birthday · THE CARNIVAL
+
+   Architecture after "Structured" (styles.refero.design) — a gallery hung on
+   putty paper. What is borrowed is the ARCHITECTURE, not the mood:
+
+     · full-bleed sections, no max-width page container
+     · hard cuts between a light tier and a dark tier — never a gradient
+       between them, never a shadow to fake depth
+     · one monumental display face, cropped at the viewport edge, against one
+       small disciplined grotesk that never grows past 26px
+     · circular image crops, pill buttons, notched cards, hexagon indicators
+     · 4px base unit, 80px section gap, 24px card padding, 6px element gap
+
+   What is kept is the fair: the palette is cherry and gold, the putty canvas
+   is warmed toward the gold, and the carousel's own furniture — canopy
+   stripes, marquee lamps, bunting, ticket notches — survives, redrawn flat.
+   ========================================================================= */
+
+@theme {
+  /* ---- Surface tiers. Structured's eight, warmed into the fair. ---------
+     Ink and Ink-Raised are the dark rooms; Putty is the dominant canvas;
+     Bone lifts a card off it; Chalk is the lightest tier; Paper is reverse. */
+  --color-ink:        #2A040C;  /* dark room, deepest ground               */
+  --color-ink-raised: #43070F;  /* elevated surface inside a dark room     */
+  --color-graphite:   #5A4634;  /* muted secondary text on light           */
+  --color-ash:        #8C7A63;  /* quietest text on light, hairline ink    */
+  --color-putty:      #E8CF96;  /* THE canvas — every light room, one tone */
+  --color-vellum:     #CDB073;  /* hairline borders, struck on the wheat   */
+  --color-bone:       #F3E3BC;  /* the one lifted surface: cards and sheets*/
+  --color-chalk:      #F4EEE0;  /* NOT a ground — this is the light TEXT
+                                   colour every dark room sets its copy in
+                                   (text-chalk/65 and friends). The footer
+                                   tier that used to be painted in it is on
+                                   the canvas now, like every other room.   */
+  --color-paper:      #FFFDF7;  /* reverse type, crisp fills               */
+
+  /* ---- Cherry: the canopy panels, the wax, the primary act -------------- */
+  --color-cherry:      #C1122E;  /* THE cherry                             */
+  --color-cherry-deep: #8A0F22;  /* cherry as text on putty: 6.4:1         */
+  --color-cherry-dark: #6E0B1D;
+
+  /* ---- Gold: the beading, the lamps, the rules -------------------------- */
+  --color-gold:        #C08A12;  /* THE gold                               */
+  --color-gold-ink:    #7A5606;  /* gold as text on putty                  */
+  --color-gold-bright: #E2B848;
+  --color-gold-pale:   #F0DDA8;
+  --color-filament:    #FFF3C4;  /* lit lamp glass                         */
+
+  /* ---- Type --------------------------------------------------------------
+     Two voices and a printer's mark. Rye is display only and never appears
+     below 34px; Inter is utility only and never appears above 26px; Alfa
+     Slab prints figures and nothing else. */
+  --font-display: 'Rye', 'Playfair Display', Georgia, serif;
+  --font-poster:  'Alfa Slab One', Georgia, serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --font-label:   'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+
+  /* ---- Type scale. Structured's ladder, held to. ------------------------ */
+  --text-micro:   0.75rem;   /* 12 — labels, buttons, stat pairs           */
+  --text-2xs:     0.75rem;   /* alias, existing call sites                 */
+  --text-body-sm: 0.9375rem; /* 15                                          */
+  --text-xs:      0.9375rem;
+  --text-body:    1rem;      /* 16                                          */
+  --text-sm:      1rem;
+  --text-base:    1rem;
+  --text-sub:     1.375rem;  /* 22 — vignette captions                      */
+  --text-lg:      1.375rem;
+  --text-h-sm:    1.625rem;  /* 26 — the utility ceiling                    */
+  --text-xl:      1.625rem;
+  --text-h:       2.6875rem; /* 43                                          */
+  --text-2xl:     2.6875rem;
+  --text-h-lg:    3.25rem;   /* 52 — display floor                          */
+  --text-3xl:     3.25rem;
+  --text-4xl:     5.875rem;  /* 94 — section display                        */
+
+  /* ---- Spacing. 4px base; Structured's own ladder. ---------------------- */
+  --space-1:  0.25rem;  /*  4 */
+  --space-2:  0.375rem; /*  6 — element gap */
+  --space-4:  1rem;     /* 16 */
+  --space-5:  1.25rem;  /* 20 */
+  --space-7:  1.75rem;  /* 28 — column gap */
+  --space-8:  2rem;     /* 32 */
+  --space-9:  2.25rem;  /* 36 */
+  --space-10: 2.5rem;   /* 40 */
+  --space-13: 3.25rem;  /* 52 */
+  --space-15: 3.75rem;  /* 60 */
+  --space-20: 5rem;     /* 80 — section gap */
+  --space-24: 6rem;     /* 96 */
+  --space-42: 10.5rem;  /* 168 */
+
+  /* ---- Radii. Three values, and no others. ----------------------------- */
+  --radius-link: 2px;
+  --radius-card: 9px;
+  --radius-pill: 999px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #E8CF96;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.006em;
+    color: #2A040C;
+    background-color: #E8CF96;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* One visible ring for every interactive thing. Cherry on light, gold in a
+     dark room — the ring has to be seen against whichever tier it lands on. */
+  :where(a, button, [role='button'], input, textarea, select):focus-visible {
+    outline: 2px solid #C1122E;
+    outline-offset: 3px;
+    border-radius: var(--radius-link);
+  }
+  :where(.tier-ink, .tier-ink *):focus-visible {
+    outline-color: #E2B848;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================================================
+   TIERS — the hard cut. A section declares which room it is in and inherits
+   every colour decision from that one class. Nothing gradients between them.
+   ========================================================================= */
+
+/* Every light room is the one canvas now — hero, ride, footer and all. The
+   hard cut on this page is between LIGHT and DARK, and it was never the small
+   steps between three creams that did that work. */
+.tier-putty { background-color: #E8CF96; color: #2A040C; }
+/* The room the ride stands in. It is the plain canvas now — the clip carries
+   its own pool of night (see `.ride-stage`) rather than being composited
+   against the section's colour. */
+.tier-ride  { background-color: #E8CF96; color: #2A040C; }
+.tier-bone  { background-color: #E8CF96; color: #2A040C; }
+.tier-chalk { background-color: #E8CF96; color: #2A040C; }
+.tier-ink   { background-color: #2A040C; color: #F4EEE0; }
+
+/* The tooth of pressed card. A single flat dot screen — enough to stop the
+   putty reading as a plain fill, never enough to read as texture. */
+.tier-putty, .tier-bone, .tier-chalk, .tier-ride {
+  background-image:
+    radial-gradient(rgba(90, 70, 52, 0.07) 0.5px, transparent 0.6px);
+  background-size: 20px 20px;
+}
+
+/* In a dark room the same screen is struck in gold. */
+.tier-ink {
+  background-image:
+    radial-gradient(rgba(226, 184, 72, 0.07) 0.5px, transparent 0.6px);
+  background-size: 20px 20px;
+}
+
+/* ============================================================================
+   SECTIONS — full bleed, no page container. The inner measure is the only
+   thing ever constrained.
+   ========================================================================= */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-block: var(--space-20);
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .section { padding-block: var(--space-24); }
+}
+
+/* The measure. Content sits inside this; backgrounds never do. */
+.measure {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+@media (min-width: 768px) {
+  .measure { padding-inline: var(--space-10); }
+}
+.measure-narrow { max-width: 820px; }
+
+/* Hairline between two sections of the SAME tier, where the hard cut would
+   not otherwise register. Never between tiers — there the cut does the work. */
+.cut-hairline { border-top: 1px solid #CDB073; }
+.tier-ink.cut-hairline { border-top-color: rgba(226, 184, 72, 0.22); }
+
+/* ============================================================================
+   TYPE ROLES
+   ========================================================================= */
+
+.font-display { font-family: var(--font-display); font-weight: 400; }
+.font-poster  { font-family: var(--font-poster);  font-weight: 400; }
+.font-body    { font-family: var(--font-body); }
+.font-label   { font-family: var(--font-label); }
+
+/* THE WORDMARK — Structured's 374px hero, in wood type. Sized off the
+   viewport so it always reaches both edges; the section clips it, because the
+   name is meant to run out of the frame the way a fairground bill does. */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  /* The name leads the room now, so it is capped against the viewport's
+     height as well as its width — on a short, wide screen a 19.5vw name would
+     push the tagline, the hosts and the buttons off the bottom of the fold. */
+  font-size: clamp(3.25rem, min(19.5vw, 27svh), 16.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.009em;
+  white-space: nowrap;
+  color: #C1122E;
+  /* Rye's descenders run well past the 0.84 line box; the extra bottom pad is
+     what keeps the tail of the y off whatever is set beneath the name. */
+  padding-top: 0.06em;
+  padding-bottom: 0.2em;
+  /* The gilding is laid over the name as a second, absolutely placed copy. */
+  position: relative;
+}
+
+/* Each glyph is its own box, because a transform does not apply to a bare
+   inline and the name is lettered one character at a time. */
+.wordmark-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* THE GILDING — the name again in lamp gold, laid exactly over the first copy
+   and shown only through a narrow diagonal band that crosses it once every
+   nine seconds. `inherit` on the padding puts its content box on the same
+   line as the name's, since `inset: 0` lands on the padding box.
+
+   Between passes the layer sits at zero opacity, which is what makes the
+   pause a pause rather than a band parked off the edge. */
+.wordmark-shine {
+  position: absolute;
+  inset: 0;
+  padding-top: inherit;
+  padding-bottom: inherit;
+  /* The lamps' own gold, not the pale one: over cherry, #F0DDA8 reads as a
+     wash and #E2B848 reads as gold leaf catching the light. */
+  color: #E2B848;
+  pointer-events: none;
+  /* It is the same word twice in the DOM. `aria-label` on the heading keeps a
+     screen reader from reading it twice; this keeps a cursor from copying it
+     twice. */
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(
+    112deg,
+    transparent 42%,
+    rgba(0, 0, 0, 0.35) 47%,
+    #000 50%,
+    rgba(0, 0, 0, 0.35) 53%,
+    transparent 58%
+  );
+  mask-image: linear-gradient(
+    112deg,
+    transparent 42%,
+    rgba(0, 0, 0, 0.35) 47%,
+    #000 50%,
+    rgba(0, 0, 0, 0.35) 53%,
+    transparent 58%
+  );
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  will-change: mask-position, opacity;
+  /* Held until the lettering has finished: 0.18s in, eight letters on a 75ms
+     beat, and a 1.05s glyph — 1.8s, so the gold starts at 2.4s. */
+  animation: wordmarkShine 9s cubic-bezier(0.45, 0, 0.3, 1) 2.4s infinite;
+}
+
+@keyframes wordmarkShine {
+  0%, 4% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    opacity: 0;
+  }
+  13% { opacity: 0.92; }
+  30% { opacity: 0.92; }
+  40%, 100% {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+    opacity: 0;
+  }
+}
+
+/* The gilding is a decoration on a light source, not information. Asked for
+   less motion, it does not run at all — the component does not build it, and
+   this is the belt to that brace. */
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-shine { display: none; }
+}
+
+/* On a phone the name FITS rather than crops.
+
+   "Aaradhya" measures 4.99em in Rye, so it holds one line only while the font
+   is at most (viewport - the measure's 40px of side padding) / 4.99 — which
+   is 20.04vw - 8px. The rule below is that, with a little margin. Above this
+   breakpoint the deliberate run-off-both-edges crop is left alone: it is the
+   whole idea of the hero, and there is room for it there. */
+@media (max-width: 767px) {
+  .wordmark { font-size: min(calc(19.6vw - 8px), 26svh); }
+}
+/* The measure's side padding doubles to 40px each at 768, so the fit formula
+   has to as well. A tablet crops the name harder than a desktop does — same
+   19.5vw of type against 80px less room — so it fits here too. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .wordmark { font-size: min(calc(19.8vw - 16px), 26svh); }
+}
+
+/* The wordmark in a dark room. */
+.wordmark-ink { color: #F0DDA8; }
+
+/* THE LOGOTYPE — the name again, in the bar, in the same wood type as the
+   hero so the mark and the bill read as one thing. It is the single exception
+   to "Rye never appears below 34px": a logotype is a picture of a name rather
+   than a line of type, and the bar is the one place the name has to be
+   recognised at a glance rather than read. */
+.logotype {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.0625rem;
+  line-height: 1;
+  letter-spacing: 0.004em;
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .logotype { font-size: 1.1875rem; }
+}
+
+/* A NAME INSIDE A LINE OF COPY — the second exception to "Rye never appears
+   below 34px", and it earns it the same way the logotype does: this is a name
+   being pointed at, not a line being read. Three corrections make wood type
+   sit inside a grotesk without disturbing it:
+     · Rye's x-height runs short against Inter, so it is set a step larger to
+       look the same size rather than measure the same size;
+     · its line-height is pinned to 1 so the taller glyphs cannot open up the
+       paragraph's leading and push the rows of the timeline apart;
+     · wood type sets tight at small sizes, so the tracking is opened a hair. */
+.name-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.16em;
+  line-height: 1;
+  letter-spacing: 0.012em;
+  color: #C1122E;
+  /* Rye rides high on the baseline here; seat it back down onto the line. */
+  vertical-align: -0.015em;
+}
+
+/* SECTION DISPLAY — 94px at the top of the scale, centred, wood type. */
+.display-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.125rem, 7vw, 5.875rem);
+  line-height: 0.92;
+  letter-spacing: -0.009em;
+  text-wrap: balance;
+}
+
+/* The step down — card values, vignette captions, quotes. */
+.display-sm {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.375rem, 2.6vw, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+}
+
+/* THE HERO TAGLINE — the label voice, one step up. Under a name set at 200px
+   a 12px kicker disappears, so this is the one place the small grotesk is
+   allowed past the label size, and it pays for it in tracking. */
+.hero-tagline {
+  font-family: var(--font-label);
+  font-size: clamp(0.8125rem, 1.45vw, 1.0625rem);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* THE DATE REVEAL — the line that has to carry the date on its own, in the
+   dark room. Display face, a step under the section titles, which is where
+   the one fact everybody came for belongs. */
+.date-reveal {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.6875rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.008em;
+  text-wrap: balance;
+}
+
+/* Body. Structured tops its grotesk out at 26px and so do we. */
+.copy {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: -0.006em;
+}
+.copy-sm { font-family: var(--font-body); font-size: var(--text-body-sm); line-height: 1.5; }
+
+/* THE LABEL — 12px uppercase grotesk. Every kicker, every button, every stat.
+   The only small-caps voice on the page. */
+.label,
+.label-ticket {
+  font-family: var(--font-label);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+/* THE ORDINAL — 3 at full size, "rd" raised and reduced beside it, the way a
+   printer sets one. Everything is in `em`, so the mark rides whatever type it
+   lands in: the nav's 12px label, the hero's tagline, a display line. */
+.ordinal {
+  white-space: nowrap;
+}
+.ordinal > sup {
+  font-size: 0.52em;
+  line-height: 0;
+  position: relative;
+  top: -0.48em;
+  vertical-align: baseline;
+  margin-left: 0.05em;
+  font-weight: inherit;
+  letter-spacing: 0.02em;
+}
+
+/* STAT PAIR — "GATES · 6:00 PM". 16px, weight 500, uppercase, no background;
+   separated by a hairline rule rather than a box. */
+.stat-pair {
+  font-family: var(--font-label);
+  font-size: var(--text-body);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.stat-pair dt {
+  font-size: var(--text-micro);
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+}
+.stat-pair dd { margin: 0; }
+
+/* The divider between two stats in a row. */
+.stat-divider {
+  width: 1px;
+  align-self: stretch;
+  background-color: currentColor;
+  opacity: 0.22;
+}
+
+/* ============================================================================
+   BUTTONS — one pill, four fills. Flat: no gradient, no shadow, no lift.
+   Structured's tight padding, widened to a 44px tap target.
+   ========================================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding-block: 0.75rem;
+  padding-inline: 1.5rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-label);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  touch-action: manipulation;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+/* The primary act, in a light room. */
+.btn-cherry {
+  background-color: #C1122E;
+  color: #FFFDF7;
+}
+.btn-cherry:hover { background-color: #8A0F22; }
+
+/* The primary act, in a dark room — cherry on cherry does not read. */
+.btn-gold {
+  background-color: #E2B848;
+  color: #2A040C;
+}
+.btn-gold:hover { background-color: #F0DDA8; }
+
+/* Secondary, light room. */
+.btn-outline-ink {
+  background-color: transparent;
+  color: #8A0F22;
+  border-color: #CDB073;
+}
+.btn-outline-ink:hover { border-color: #C1122E; color: #C1122E; }
+
+/* Secondary, dark room. */
+.btn-outline {
+  background-color: transparent;
+  color: #F0DDA8;
+  border-color: rgba(226, 184, 72, 0.45);
+}
+.btn-outline:hover { border-color: #E2B848; color: #FFF3C4; }
+
+/* GHOST TEXT LINK — navigation and quiet inline actions. Underline on hover. */
+.link-ghost {
+  font-family: var(--font-label);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  color: inherit;
+  border-radius: var(--radius-link);
+  cursor: pointer;
+  text-underline-offset: 4px;
+  transition: opacity 180ms ease;
+}
+.link-ghost:hover { text-decoration: underline; }
+.link-ghost[aria-current='true'] { text-decoration: underline; }
+
+/* ============================================================================
+   CARDS — 9px radius, 24px padding, flat. Depth comes from the tier the card
+   sits on, never from a shadow.
+   ========================================================================= */
+
+.card {
+  background-color: #F3E3BC;
+  border: 1px solid #CDB073;
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+}
+.card-ink,
+.tier-ink .card {
+  background-color: #43070F;
+  border-color: rgba(226, 184, 72, 0.28);
+  color: #F4EEE0;
+}
+
+/* NOTCHED CARD — Structured's hexagonal corner geometry, which is also the
+   shape a ticket punch leaves. */
+.notched {
+  --notch: 20px;
+  clip-path: polygon(
+    var(--notch) 0, 100% 0,
+    100% calc(100% - var(--notch)), calc(100% - var(--notch)) 100%,
+    0 100%, 0 var(--notch)
+  );
+}
+
+/* A notched card cannot carry a border — clip-path cuts it. The keyline is a
+   1px parent showing through instead. */
+.notched-frame {
+  --notch: 20px;
+  background-color: #CDB073;
+  padding: 1px;
+  clip-path: polygon(
+    var(--notch) 0, 100% 0,
+    100% calc(100% - var(--notch)), calc(100% - var(--notch)) 100%,
+    0 100%, 0 var(--notch)
+  );
+}
+.tier-ink .notched-frame { background-color: rgba(226, 184, 72, 0.32); }
+
+/* ============================================================================
+   THE RIDE — the carousel band. The clip is set into the page as it is: no
+   blend mode, no pool, no feathered edges. It carries the site's own warm
+   ground, so it needs nothing done to it to sit in the page.
+
+   `cover` into a stage that opens up as the screen narrows is the whole of
+   the sizing: the clip fills its box completely at every width, so there is
+   never a letterbox bar, and on a phone the frame's empty side margins are
+   cropped away instead of the ride being shrunk to fit them.
+   ========================================================================= */
+
+.ride-stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Only ever seen for the instant before the poster paints. */
+  background-color: #E8CF96;
+}
+
+.ride-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* `contain`, not `cover`: the stage is set to the clip's own 16/9, so the
+     two fit identically today — but only this one is guaranteed never to crop
+     the ride if that box is ever changed. */
+  object-fit: contain;
+}
+
+/* ============================================================================
+   PHOTO CARDS — the sideshow wall.
+
+   One frame for every photograph, whatever shape it arrived in: a 4:5 crop in
+   a cherry border with a gold hairline struck inside it, the one place in this
+   flat system where a shadow is allowed, because these are meant to read as
+   printed cards pinned to a dark room rather than as holes cut in the wall.
+
+   Below sm the row they sit in is a scroll-snap rail; the scrollbar is hidden
+   because the hex dots under it already say where you are.
+   ========================================================================= */
+
+.photo-rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-padding-inline: var(--space-5);
+}
+.photo-rail::-webkit-scrollbar { display: none; }
+
+.photo-card-frame {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #43070F;
+  border: 2px solid rgba(193, 18, 46, 0.62);
+  box-shadow:
+    inset 0 0 0 1px rgba(226, 184, 72, 0.42),
+    0 14px 34px -16px rgba(0, 0, 0, 0.78);
+  transition:
+    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.photo-card-frame img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The lift is for a mouse. A touch device gets the still card — there is no
+   hover there, and the sticky :hover a phone leaves behind is worse than none. */
+@media (hover: hover) and (pointer: fine) {
+  .photo-card:hover .photo-card-frame {
+    transform: translateY(-6px);
+    border-color: rgba(226, 184, 72, 0.78);
+    box-shadow:
+      inset 0 0 0 1px rgba(240, 221, 168, 0.6),
+      0 26px 46px -18px rgba(0, 0, 0, 0.85);
+  }
+  .photo-card:hover .photo-card-frame img { transform: scale(1.05); }
+}
+
+.photo-card:focus-visible { outline: none; }
+.photo-card:focus-visible .photo-card-frame {
+  outline: 2px solid #E2B848;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-card-frame,
+  .photo-card-frame img { transition: none; }
+  .photo-card:hover .photo-card-frame,
+  .photo-card:hover .photo-card-frame img { transform: none; }
+  .photo-rail { scroll-behavior: auto; }
+}
+
+/* ============================================================================
+   THE FAIR'S OWN FURNITURE — redrawn flat for this architecture.
+   ========================================================================= */
+
+/* CANOPY — cherry and gold panels with a scalloped hem. A stripe pattern, not
+   a shading gradient: it stays inside the flat rule. */
+.canopy {
+  --stripe: 26px;
+  --scallop: 13px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #C1122E 0 var(--stripe),
+    #E2B848 var(--stripe) calc(var(--stripe) * 2)
+  );
+  -webkit-mask:
+    radial-gradient(var(--scallop) at 50% calc(100% - var(--scallop)), #000 99%, #0000 101%)
+      50% 100% / calc(var(--scallop) * 2) var(--scallop) repeat-x,
+    linear-gradient(#000 0 0) 0 0 / 100% calc(100% - var(--scallop)) no-repeat;
+  mask:
+    radial-gradient(var(--scallop) at 50% calc(100% - var(--scallop)), #000 99%, #0000 101%)
+      50% 100% / calc(var(--scallop) * 2) var(--scallop) repeat-x,
+    linear-gradient(#000 0 0) 0 0 / 100% calc(100% - var(--scallop)) no-repeat;
+}
+
+/* MARQUEE LAMPS — a run of bulbs on a wire, used as a rule. The glass is a
+   variable: pale filament reads on ink, amber reads on putty. */
+.bulb-rule {
+  --glass: #C08A12;
+  --wire: rgba(192, 138, 18, 0.5);
+  height: 9px;
+  background-image:
+    radial-gradient(circle, var(--glass) 0 2.4px, transparent 3.1px),
+    linear-gradient(90deg, transparent, var(--wire) 18%, var(--wire) 82%, transparent);
+  background-size: 22px 9px, 100% 1px;
+  background-position: 0 0, 0 50%;
+  background-repeat: repeat-x, no-repeat;
+}
+/* On ink. */
+.bulb-rule-lit {
+  --glass: #FFF3C4;
+  --wire: rgba(226, 184, 72, 0.4);
+}
+/* Kept for existing call sites; the amber glass is now the default. */
+.bulb-rule-ink { --glass: #C08A12; --wire: rgba(192, 138, 18, 0.5); }
+
+/* THE CHASE — two rings of lamps half a pitch apart, breathing in antiphase,
+   so the light appears to run round the frame. Held to two places on the
+   page: the invitation frame and the ticket booth. */
+.bulb-ring {
+  --bulb: #FFF3C4;
+  --pitch: 30px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, var(--bulb) 0 2.6px, transparent 3.4px),
+    radial-gradient(circle, var(--bulb) 0 2.6px, transparent 3.4px),
+    radial-gradient(circle, var(--bulb) 0 2.6px, transparent 3.4px),
+    radial-gradient(circle, var(--bulb) 0 2.6px, transparent 3.4px);
+  background-size:
+    var(--pitch) 9px, var(--pitch) 9px,
+    9px var(--pitch), 9px var(--pitch);
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  animation: bulbChase 1.9s steps(1, end) infinite;
+}
+.bulb-ring-b {
+  background-position:
+    calc(var(--pitch) / 2) 0, calc(var(--pitch) / 2) 100%,
+    0 calc(var(--pitch) / 2), 100% calc(var(--pitch) / 2);
+  animation-delay: 0.95s;
+}
+@keyframes bulbChase {
+  0%, 49.9%  { opacity: 1; }
+  50%, 100%  { opacity: 0.28; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bulb-ring { opacity: 0.8 !important; }
+}
+
+/* A gold hairline, for closing a block. */
+.rule-gold {
+  height: 1px;
+  background-color: rgba(192, 138, 18, 0.55);
+}
+.tier-ink .rule-gold { background-color: rgba(226, 184, 72, 0.32); }
+
+/* TICKET — notched sides and a perforated stub. */
+.ticket {
+  --notch: 12px;
+  position: relative;
+  /* The value inside is sized against THE TICKET, not the viewport — see
+     `.ticket-value`. This is what makes that possible. */
+  container-type: inline-size;
+  background-color: #F3E3BC;
+  -webkit-mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000 100%),
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000 100%),
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000 100%);
+  mask-composite: intersect;
+}
+.perforation {
+  height: 1px;
+  background-image: linear-gradient(90deg, rgba(138, 15, 34, 0.4) 55%, transparent 0);
+  background-size: 9px 1px;
+  background-repeat: repeat-x;
+}
+/* THE TICKET'S VALUE — one line, at every width.
+
+   "6:00 PM – 12:00 AM" measures 10.15em in Rye, so it holds a single line
+   only while the font is at most (ticket width - 48px of padding) / 10.15.
+   A viewport clamp cannot express that: the tightest column on the page is
+   at the md breakpoint, where three tickets share 688px and each gets about
+   163px of content — but at that same viewport a PHONE-width layout would
+   have one full-width ticket and want the type twice as big. The constraint
+   is the ticket, so the unit is the ticket: 1cqi is one percent of its own
+   inline size, and the calc below is that formula with a little margin.
+
+   All three values take it, so the date, the time and the venue stay a set. */
+.ticket-value {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -0.005em;
+  /* Fallback for anything without container units. */
+  font-size: clamp(1rem, 2.1vw, 1.75rem);
+  font-size: clamp(0.875rem, calc(9.4cqi - 4.8px), 1.75rem);
+}
+
+.ticket-head {
+  position: relative;
+  overflow: hidden;
+  background-color: #C1122E;
+  color: #FFFDF7;
+}
+
+/* A slow gleam crossing the head bar, the way light runs along a painted
+   fascia. It is a transform on a pseudo-element, so it composites; the band
+   is only ever visible while it overlaps the bar it is clipped to. Each
+   ticket sets its own `--gleam-delay`, so the three never flash together. */
+.ticket-head::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    104deg,
+    transparent 36%,
+    rgba(255, 243, 196, 0.4) 50%,
+    transparent 64%
+  );
+  transform: translateX(-100%);
+  animation: ticketGleam 8s cubic-bezier(0.4, 0, 0.25, 1) infinite;
+  animation-delay: var(--gleam-delay, 0s);
+  pointer-events: none;
+  will-change: transform;
+}
+
+@keyframes ticketGleam {
+  0%, 6%     { transform: translateX(-100%); }
+  34%, 100%  { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket-head::after { animation: none; opacity: 0; }
+}
+
+/* SECTION STUB — the small notched tab that names an attraction. */
+.section-stub {
+  --notch: 7px;
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  background-color: #C1122E;
+  color: #FFFDF7;
+  font-family: var(--font-label);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  -webkit-mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000 100%),
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000 100%),
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000 100%);
+  mask-composite: intersect;
+}
+.tier-ink .section-stub { background-color: #E2B848; color: #2A040C; }
+
+/* ============================================================================
+   FORM CONTROLS — flat fields on paper, 9px radius, one hairline.
+   ========================================================================= */
+
+.field {
+  width: 100%;
+  border-radius: var(--radius-card);
+  border: 1px solid #CDB073;
+  background-color: #FFFDF7;
+  padding: 0.75rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  color: #2A040C;
+  transition: border-color 180ms ease;
+}
+.field:focus {
+  outline: none;
+  border-color: #C1122E;
+}
+.field::placeholder { color: #8C7A63; }
+
+.field-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-label);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5A4634;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  width: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  background-color: #FFFDF7;
+  border: 1px solid #CDB073;
+  color: #8A0F22;
+  font-family: var(--font-label);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+.stepper:hover:not(:disabled) { border-color: #C1122E; background-color: #F3E3BC; }
+.stepper:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Quiet inline action in a card footer. */
+.detail-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  width: 100%;
+  font-family: var(--font-label);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8A0F22;
+  cursor: pointer;
+  text-underline-offset: 4px;
+  transition: color 180ms ease;
+}
+.detail-action:hover { color: #C1122E; text-decoration: underline; }
+
+/* ============================================================================
+   THE HERO ROOM'S OWN LIGHT — the only place this architecture permits a
+   gradient, because what is being drawn is a light source and not depth. The
+   lamps hang at the top of the room, so the top of the room is lit.
+   ========================================================================= */
+
+/* Re-pitched for the wheat ground. The old pool was gold on a pale beige, so
+   gold alone was enough to read as light; on a ground that is already gold,
+   light has to be BRIGHTER than the room rather than warmer than it — hence
+   the near-cream core. The fade-out stop is the canvas itself, so none of the
+   old beige is left anywhere in the ramp. */
+.hero-wash {
+  background-image:
+    radial-gradient(
+      128% 66% at 50% -10%,
+      rgba(255, 251, 231, 0.74) 0%,
+      rgba(251, 232, 173, 0.36) 32%,
+      rgba(232, 207, 150, 0) 70%
+    ),
+    radial-gradient(58% 38% at 10% 6%, rgba(158, 14, 36, 0.11), transparent 72%),
+    radial-gradient(58% 38% at 90% 4%, rgba(158, 14, 36, 0.10), transparent 72%),
+    radial-gradient(90% 45% at 50% 104%, rgba(104, 70, 6, 0.13), transparent 70%);
+}
+
+/* The big top, implied: rays fanning down from a point above the name, faded
+   out before they reach any line of type. */
+.hero-rays {
+  /* Struck deeper than before: a #C08A12 ray read clearly on #DED4BB, but on
+     the wheat it is very nearly the ground itself. */
+  background-image: repeating-conic-gradient(
+    from 186deg at 50% -7%,
+    rgba(150, 104, 10, 0.115) 0deg 3.4deg,
+    rgba(150, 104, 10, 0) 3.4deg 11deg
+  );
+  -webkit-mask-image: radial-gradient(
+    92% 82% at 50% 0%,
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 42%,
+    transparent 80%
+  );
+  mask-image: radial-gradient(
+    92% 82% at 50% 0%,
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 42%,
+    transparent 80%
+  );
+}
+
+/* An attraction printed into the background stock — line only, barely there,
+   and never under the centre column where the type runs. The class goes on
+   the WRAPPER, which carries the position and the ambient motion; the drawing
+   inside it carries only its size. */
+.hero-motif {
+  position: absolute;
+  /* The fair is drawn in the name's own cherry, so the room and the wordmark
+     read as one palette rather than two.
+
+     It is struck a shade fainter than the gold it replaces. Gold on wheat was
+     a tone-on-tone drawing and separated almost entirely by value; cherry on
+     wheat separates by HUE as well, which the eye picks up far more readily,
+     so the same opacity would have promoted the furniture to foreground. At
+     0.14 the two sit at about the same visual weight — present, tinting the
+     scene, never competing with the name. */
+  color: #C1122E;
+  opacity: 0.14;
+  will-change: transform, opacity;
+}
+
+/* The rim of the ferris wheel, turning about its hub while the A-frame under
+   it stands still. `view-box` puts the origin in the drawing's own 48-unit
+   coordinates rather than in the rendered box. */
+.motif-wheel {
+  transform-box: view-box;
+  transform-origin: 24px 21px;
+  animation: motifSpin 110s linear infinite;
+}
+@keyframes motifSpin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motif-wheel { animation: none; }
+}
+
+/* The same furniture, hung in a light room other than the hero. Deliberately
+   its own rule rather than a second selector on `.hero-motif`: that one's
+   balance has been tuned by hand more than once, and keeping them separate
+   lets either move without dragging the other with it. */
+.motif-putty {
+  position: absolute;
+  color: #C1122E;
+  opacity: 0.14;
+  will-change: transform, opacity;
+}
+
+/* THE RAIL — the vertical rule the running order hangs off, drawn downward as
+   the list is scrolled through.
+
+   Its x is the centre of the icon column, which is grid arithmetic, so it is
+   spelled out rather than guessed: on a phone the icon is the first column
+   (40px wide) and its centre is 20px; from `sm` up the row is `6rem auto 1fr`
+   on a 2rem gap, so the centre is 96 + 32 + 20 = 148px. Change that grid and
+   this has to move with it. */
+.timeline-rail {
+  --rail-x: 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--rail-x) - 0.5px);
+  width: 1px;
+  background-color: rgba(193, 18, 46, 0.22);
+  transform-origin: top center;
+  pointer-events: none;
+  will-change: transform;
+}
+@media (min-width: 640px) {
+  .timeline-rail { --rail-x: 148px; }
+}
+
+/* Each entry's motif sits on a disc of the room's own ground, so the rail is
+   interrupted at every icon instead of drawn straight through the middle of
+   the drawing. The entries are positioned and come after the rail in the
+   document, so they paint over it without needing a z-index. */
+.timeline-icon {
+  position: relative;
+  /* Faded out at its rim rather than cut off at it. A flat disc of the tier
+     colour is a shade lighter than the drifting wash laid over the room, and
+     on a narrow screen — where that wash is strongest down the left edge —
+     five levels of difference print as a visible ring. This has no edge to
+     see, and still breaks the rail cleanly under the drawing. */
+  background-image: radial-gradient(
+    closest-side,
+    #E8CF96 58%,
+    rgba(232, 207, 150, 0.75) 80%,
+    rgba(232, 207, 150, 0) 100%
+  );
+}
+
+/* The same furniture, hung in a dark room. Cherry disappears against the ink,
+   so the drawing is struck in the lamps' gold — the tone the ink tier already
+   prints its own dot screen in. */
+.room-motif {
+  position: absolute;
+  color: #E2B848;
+  opacity: 0.1;
+  will-change: transform, opacity;
+}
+
+/* THE DRIFTING GROUND — a wash laid inside a room and moved at a different
+   speed from the content standing on it. It carries no dot screen of its own:
+   the tier under it already prints one, and two would moiré. */
+.tier-ink-drift {
+  background-image:
+    radial-gradient(52% 34% at 50% 0%, rgba(226, 184, 72, 0.11), transparent 72%),
+    radial-gradient(42% 30% at 6% 64%, rgba(193, 18, 46, 0.18), transparent 74%),
+    radial-gradient(42% 30% at 94% 34%, rgba(226, 184, 72, 0.09), transparent 74%);
+  will-change: transform;
+}
+
+.tier-putty-drift {
+  background-image:
+    radial-gradient(48% 30% at 50% -4%, rgba(255, 249, 224, 0.42), transparent 72%),
+    radial-gradient(40% 26% at 4% 58%, rgba(158, 14, 36, 0.075), transparent 74%),
+    radial-gradient(40% 26% at 96% 30%, rgba(122, 86, 6, 0.13), transparent 74%);
+  will-change: transform;
+}
+
+/* ============================================================================
+   SMOOTH SCROLL — Lenis drives the page, so the browser's own smoothing has
+   to get out of the way; these are the library's required rules, kept here
+   rather than imported so the stylesheet stays the one source of layout.
+   ========================================================================= */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+html.lenis {
+  scroll-behavior: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+.lenis.lenis-autoToggle {
+  transition-property: overflow;
+  transition-duration: 1ms;
+  transition-behavior: allow-discrete;
+}
+
+/* Scroll-driven transforms are compositor work; declaring it keeps the
+   painting off the main thread and the page free of jitter. */
+.hero-wash,
+.hero-rays {
+  will-change: transform;
+}
+
+/* ============================================================================
+   MOTION — entrances only, and one bob. Nothing loops that isn't a lamp.
+   ========================================================================= */
+
+@keyframes fadeInRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Fill mode is `backwards`, never `forwards`/`both`: a retained transform
+   would make this wrapper the containing block for every position:fixed
+   descendant, grounding the nav and the player to the page. */
+.animate-fade-in { animation: fadeInRise 900ms cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.animate-float-gentle { animation: floatGentle 6s ease-in-out infinite; }
+
+@keyframes pennantStir {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50%      { transform: rotate(2.5deg); }
+}
+
+/* ============================================================================
+   UTILITIES
+   ========================================================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

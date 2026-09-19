@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Environment — never commit real secrets
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS cruft
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Editor / local tooling
+.vscode/
+.idea/
+.claude/

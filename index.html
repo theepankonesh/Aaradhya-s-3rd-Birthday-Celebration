@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aaradhya’s 3rd Birthday Celebration</title>
+    <meta name="description" content="You’re invited to celebrate Aaradhya’s 3rd birthday!" />
+    <meta property="og:title" content="Aaradhya’s 3rd Birthday Celebration" />
+    <meta property="og:description" content="You’re invited to celebrate Aaradhya’s 3rd birthday!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/carousel.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#E8CF96" />
+    <!-- The tab's mark: the numeral in Alfa Slab One, cherry on putty and
+         ruled in gold — the same printer's mark the page uses for its figures.
+         Each size is drawn at its own scale rather than squeezed down from one
+         master, so the gold rule stays a crisp hairline at 16px instead of
+         turning to grey mud. The .ico carries 16/32/48 for Windows and the
+         legacy root request; the PNGs are what modern browsers actually pick. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <!-- iOS masks its own corners and composites on white, so this one is
+         opaque and full-bleed — no pre-rounded corners, no alpha. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Preload critical envelope assets: the sealed poster paints first, the clip
+         streams in behind it so the tap plays instantly. -->
+    <link rel="preload" href="/assets/envelope-closed.png" as="image" />
+    <link rel="preload" href="/assets/luxury_envelope_opening_1.mp4" as="video" type="video/mp4" />
+    <!-- Type: two voices and a printer's mark, after the gallery architecture.
+         Rye is nineteenth-century wood type — the display face, used only at
+         monumental sizes for the name and the section titles. Inter is the
+         utility grotesk: navigation, body, labels, buttons, never above 26px.
+         Alfa Slab One prints figures only — the big 3 and the running times. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Inter:wght@400;500;600;700&family=Rye&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
