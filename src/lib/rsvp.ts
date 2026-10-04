@@ -44,12 +44,31 @@ export const toRSVPPayload = (form: RSVPFormData): RSVPPayload => {
  * Resolving therefore means "the browser completed the request", not "the sheet
  * has the row". Only a genuine network failure throws, and that is the one
  * signal worth showing the guest.
+ *
+ * A stalled connection (patchy mobile data, in-app browsers) would otherwise
+ * leave the promise pending forever, so the request is aborted after
+ * RSVP_TIMEOUT_MS and rejects with an `AbortError`. The timer is a plain
+ * AbortController + setTimeout rather than `AbortSignal.timeout`, which older
+ * iOS Safari and some in-app webviews lack.
  */
+export const RSVP_TIMEOUT_MS = 15000;
+
 export const submitRSVP = async (form: RSVPFormData): Promise<void> => {
-  await fetch(RSVP_ENDPOINT, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(toRSVPPayload(form))
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), RSVP_TIMEOUT_MS);
+
+  try {
+    await fetch(RSVP_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(toRSVPPayload(form)),
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 };
+
+export const isTimeoutError = (err: unknown): boolean =>
+  err instanceof Error && err.name === 'AbortError';

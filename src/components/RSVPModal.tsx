@@ -4,7 +4,7 @@ import { RSVPFormData, RSVPRecord } from '../types';
 import { X, Sparkles, Ticket, Send } from 'lucide-react';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { Canopy, TicketMark } from './CarnivalOrnaments';
-import { submitRSVP } from '../lib/rsvp';
+import { submitRSVP, isTimeoutError } from '../lib/rsvp';
 
 interface RSVPModalProps {
   isOpen: boolean;
@@ -80,7 +80,9 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({
       console.error('RSVP submission failed:', err);
       setIsSubmitting(false);
       setSubmitError(
-        'We could not reach the ticket office just now. Please check your connection and try again.'
+        isTimeoutError(err)
+          ? 'The ticket office is taking too long to answer. Please try again in a moment.'
+          : 'Something went wrong reaching the ticket office. Please check your connection and try again.'
       );
       return;
     }
