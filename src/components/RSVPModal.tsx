@@ -122,8 +122,15 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({
   const attendingYes = formData.attending === 'yes';
 
   return (
+    // The overlay is the scroller, not the card, so a tall form on a short
+    // screen scrolls as one sheet. `data-lenis-prevent` matters: Lenis is
+    // stopped while a modal is open, and a stopped Lenis cancels every touch
+    // and wheel event on the page unless it lands inside a marked element.
+    // The card centres with `m-auto` rather than `items-center`, which would
+    // push the top of an over-tall card above the viewport, out of reach.
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-ink/75 p-4 sm:p-6"
+      data-lenis-prevent
+      className="fixed inset-0 z-50 flex h-dvh overflow-x-hidden overflow-y-auto overscroll-contain bg-ink/75 px-4 py-12 [-webkit-overflow-scrolling:touch] sm:px-6 sm:py-14"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -134,7 +141,7 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({
         aria-modal="true"
         aria-labelledby="rsvp-modal-title"
         id="rsvp-modal-container"
-        className="relative my-8 w-full max-w-xl overflow-hidden rounded-[9px] border border-vellum bg-bone px-6 pt-16 pb-9 text-ink sm:px-10 sm:pt-20 sm:pb-11"
+        className="relative m-auto w-full max-w-xl overflow-hidden rounded-[9px] border border-vellum bg-bone px-6 pt-16 pb-9 text-ink sm:px-10 sm:pt-20 sm:pb-11"
         initial={{ opacity: 0, scale: 0.94, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.3 }}

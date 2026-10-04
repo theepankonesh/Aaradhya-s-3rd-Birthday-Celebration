@@ -48,8 +48,12 @@ export const EditEventModal: React.FC<EditEventModalProps> = ({
   if (!isOpen) return null;
 
   return (
+    // Same scroll arrangement as the RSVP modal: the overlay scrolls, is
+    // exempt from the stopped Lenis via `data-lenis-prevent`, and centres the
+    // card with `m-auto` so an over-tall card is never pushed out of reach.
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-ink/75 p-4 sm:p-6"
+      data-lenis-prevent
+      className="fixed inset-0 z-50 flex h-dvh overflow-x-hidden overflow-y-auto overscroll-contain bg-ink/75 px-4 py-12 [-webkit-overflow-scrolling:touch] sm:px-6 sm:py-14"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -59,7 +63,7 @@ export const EditEventModal: React.FC<EditEventModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-event-title"
-        className="relative my-8 max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-[9px] border border-vellum bg-bone p-6 text-ink sm:p-9"
+        className="relative m-auto w-full max-w-xl rounded-[9px] border border-vellum bg-bone p-6 text-ink sm:p-9"
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
       >
